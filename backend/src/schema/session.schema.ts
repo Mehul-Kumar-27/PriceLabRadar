@@ -1,4 +1,4 @@
-export interface SessionInterface {
+export interface CreateSessionInterface {
   email: string;
   password: string;
 }
@@ -8,8 +8,8 @@ function validateEmail(email: string): boolean {
   return regex.test(email);
 }
 
-export const validateSessionData = (data: SessionInterface) => {
-  const errors: Partial<SessionInterface> = {};
+export const validateSessionData = (data: CreateSessionInterface) => {
+  const errors: Partial<CreateSessionInterface> = {};
 
   if (!data.email) {
     errors.email = "Please Provide Email !";
