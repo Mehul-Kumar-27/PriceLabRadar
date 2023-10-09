@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
+import env from "../utils/validateENV"
 
 export interface UserDocument extends mongoose.Document {
   name: string;
@@ -25,7 +26,7 @@ userSchema.pre<UserDocument>("save", async function (next) {
   if (!this.isModified("password")) {
     return next();
   }
-  const salt = await bcrypt.genSalt(10);
+  const salt = await bcrypt.genSalt(env.SALTFACTOR);
   const hash = await bcrypt.hash(this.password, salt);
   this.password = hash;
   next();

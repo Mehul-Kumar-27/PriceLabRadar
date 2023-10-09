@@ -4,6 +4,7 @@ import { validateUser } from "../schema/user_schema";
 import { createUserHandeller } from "../controllers/user.controllers";
 import { validateSessionMiddleware } from "../middlewares/validate.session";
 import { validateSessionData } from "../schema/session.schema";
+import { createSessionController } from "../controllers/session.controller";
 
 export function routes(app: Express) {
   app.get(
@@ -24,6 +25,7 @@ export function routes(app: Express) {
   // Create User Session
   app.post(
     "/api/create-session",
-    validateSessionMiddleware(validateSessionData)
+    validateSessionMiddleware(validateSessionData),
+    createSessionController
   );
 }

@@ -14,7 +14,7 @@ export const validateSessionData = (data: CreateSessionInterface) => {
   if (!data.email) {
     errors.email = "Please Provide Email !";
   } else {
-    if (validateEmail(data.email)) {
+    if (!validateEmail(data.email)) {
       errors.email = "Please Provide the correct email !";
     }
   }
