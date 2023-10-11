@@ -2,15 +2,15 @@ import env from "./utils/validateENV";
 import express from "express";
 import mongoose from "mongoose";
 import { routes } from "./utils/routes";
+import deserializeUser from "./middlewares/getuser";
 
 const app = express();
 
 const port = env.PORT;
 const connectionString = env.MONGO_CONNECTION_STRING;
 app.use(express.json());
-app.get("/", (req, res) => {
-  console.log("Hello World");
-});
+
+app.use(deserializeUser)
 
 mongoose
   .connect(connectionString)

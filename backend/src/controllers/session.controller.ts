@@ -1,6 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import { validateUserPasword } from "../services/user.services";
-import { createSessionService } from "../services/session.services";
+import {
+  createSessionService,
+  findSessionService,
+} from "../services/session.services";
 import { signInJWT } from "../utils/jwt.utils";
 import env from "../utils/validateENV";
 
@@ -36,4 +39,16 @@ export async function createSessionController(
   );
 
   return res.send({ accessToken, refreshToken });
+}
+
+export async function getAllSessionController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const userId = res.locals.user._id;
+ 
+  const sessions = await findSessionService({ user: userId, valid: true });
+
+  res.send(sessions);
 }

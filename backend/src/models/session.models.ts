@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { UserDocument } from "./user.mongoose";
 
 export interface SessionInterface extends Document {
-  name: UserDocument["_id"];
+  user: UserDocument["_id"];
   valid: Boolean;
   userAgent: String;
   createdAt: Date;

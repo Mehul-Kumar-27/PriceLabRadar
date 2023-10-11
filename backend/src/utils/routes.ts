@@ -7,7 +7,11 @@ import {
 } from "../controllers/user.controllers";
 import { validateSessionMiddleware } from "../middlewares/validate.session";
 import { validateSessionData } from "../schema/session.schema";
-import { createSessionController } from "../controllers/session.controller";
+import {
+  createSessionController,
+  getAllSessionController,
+} from "../controllers/session.controller";
+import validateDeserializeUser from "../middlewares/validateDeserializeUser";
 
 export function routes(app: Express) {
   app.get(
@@ -32,5 +36,11 @@ export function routes(app: Express) {
     "/api/create-session",
     validateSessionMiddleware(validateSessionData),
     createSessionController
+  );
+
+  app.get(
+    "/api/get-user-sessions",
+    validateDeserializeUser,
+    getAllSessionController
   );
 }

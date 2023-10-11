@@ -14,12 +14,14 @@ export function signInJWT(object: Object, options?: jwt.SignOptions) {
 export function verifyJWT(token: string) {
   try {
     const decoded = jwt.verify(token, public_key);
+    
     return {
       valid: true,
       expired: false,
       decoded,
     };
   } catch (error: any) {
+    console.log(error)
     return {
       valid: false,
       expipired: error.message == "jwt token expired",
