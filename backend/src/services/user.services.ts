@@ -30,4 +30,17 @@ async function validateUserPasword(email: string, password: string) {
   }
 }
 
-export { createUser, validateUserPasword };
+async function getAllUser() {
+  try {
+    const users = await User.find();
+
+    return users.map((user) => {
+      const { password, ...userWithoutPassword } = user.toJSON();
+      return userWithoutPassword;
+    });
+  } catch (error: any) {
+    throw new Error(error);
+  }
+}
+
+export { createUser, validateUserPasword, getAllUser };
