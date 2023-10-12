@@ -10,8 +10,6 @@ export async function createSessionService(userId: string, userAgent: string) {
   return session.toJSON();
 }
 
-export async function findSessionService(
-  query: FilterQuery<SessionInterface>
-) {
-  return SessionModel.find(query);
+export async function findSessionService({ userId }: { userId: string }) {
+  return SessionModel.find({ user: userId, valid: true });
 }

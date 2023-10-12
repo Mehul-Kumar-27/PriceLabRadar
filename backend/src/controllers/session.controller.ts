@@ -47,8 +47,8 @@ export async function getAllSessionController(
   next: NextFunction
 ) {
   const userId = res.locals.user._id;
- 
-  const sessions = await findSessionService({ user: userId, valid: true });
+
+  const sessions = await findSessionService(userId);
 
   res.send(sessions);
 }
