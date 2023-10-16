@@ -8,12 +8,14 @@ const deserializeUser = (req: Request, res: Response, next: NextFunction) => {
   }
 
   // otherwise verify the access token
-  
+
   const { decoded, expired } = verifyJWT(accessToken);
 
-  if (decoded) {
+  if (decoded && !expired) {
     res.locals.user = decoded;
     return next();
+  } else if (expired) {
+    return res.status(403).send('JWT EXPIRED');
   }
 
   return next();

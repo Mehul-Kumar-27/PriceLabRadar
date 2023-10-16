@@ -8,6 +8,7 @@ const validateDeserializeUser = (
   const user = res.locals.user;
 
   if (!user) {
+    console.log("This is from Validate User");
     return res.sendStatus(403);
   }
 
