@@ -43,4 +43,6 @@ export function routes(app: Express) {
     validateDeserializeUser,
     getAllSessionController
   );
+
+ 
 }

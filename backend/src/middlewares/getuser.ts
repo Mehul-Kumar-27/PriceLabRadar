@@ -13,9 +13,12 @@ const deserializeUser = (req: Request, res: Response, next: NextFunction) => {
 
   if (decoded && !expired) {
     res.locals.user = decoded;
+    res.locals.isExpired = false;
     return next();
-  } else if (expired) {
-    return res.status(403).send('JWT EXPIRED');
+  } else if (decoded == null && expired) {
+    res.locals.user = null;
+    res.locals.isExpired = true;
+    return next();
   }
 
   return next();
