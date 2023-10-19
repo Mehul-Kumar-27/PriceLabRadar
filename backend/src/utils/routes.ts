@@ -12,12 +12,17 @@ import {
   getAllSessionController,
 } from "../controllers/session.controller";
 import validateDeserializeUser from "../middlewares/validateDeserializeUser";
+import errorHandellerMiddlerware from "../middlewares/error.handeller";
 
 export function routes(app: Express) {
   app.get(
     "/api/healthcheck",
     (req: Request, res: Response, next: NextFunction) => {
-      res.sendStatus(200);
+      try {
+        res.send(200)
+      } catch (error) {
+
+      }
     }
   );
 
@@ -26,7 +31,7 @@ export function routes(app: Express) {
   app.post(
     "/api/create-user",
     validateUserMiddleWare(validateUser),
-    createUserHandeller
+    createUserHandeller,
   );
 
   app.get("/api/get-all-users", getAllUserHandeller);
@@ -44,5 +49,6 @@ export function routes(app: Express) {
     getAllSessionController
   );
 
- 
+  app.use(errorHandellerMiddlerware)
+
 }

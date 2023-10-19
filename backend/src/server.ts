@@ -1,8 +1,9 @@
 import env from "./utils/validateENV";
-import express from "express";
+import express, { ErrorRequestHandler, NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
 import { routes } from "./utils/routes";
 import deserializeUser from "./middlewares/getuser";
+import errorHandellerMiddlerware from "./middlewares/error.handeller";
 
 const app = express();
 
@@ -12,6 +13,8 @@ app.use(express.json());
 
 app.use(deserializeUser)
 
+
+app.use(errorHandellerMiddlerware)
 mongoose
   .connect(connectionString)
   .then(() => {
