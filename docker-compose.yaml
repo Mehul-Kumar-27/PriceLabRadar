@@ -3,7 +3,7 @@ services:
   mongodb:
     image: mongo
     ports:
-      - 27017:27017
+      - 4002:27017
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=password
@@ -13,9 +13,21 @@ services:
       - mongodb
     image: mongo-express
     ports:
-      - 8081:8081
+      - 4000:8081
     restart: always
     environment:
       - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
       - ME_CONFIG_MONGODB_ADMINPASSWORD=password
       - ME_CONFIG_MONGODB_SERVER=mongodb
+      
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    ports:
+      - "4003:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+
+volumes:
+  jenkins_home:
