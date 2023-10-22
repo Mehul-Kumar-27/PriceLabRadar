@@ -11,13 +11,13 @@ export const validateSessionMiddleware =
         if (errors != null) {
 
           const errorMapField = deserealizeErrors(errors);
-          next(new BadRequestError("Data Not Formatted Correctly", errorMapField))
+          return next(new BadRequestError("Data Not Formatted Correctly", errorMapField))
         } else {
           console.log("No Errors Found");
           next();
         }
       } catch (error) {
-        next(new InternalServerError("Something Went Wrong !!"))
+        return next(new InternalServerError("Something Went Wrong !!"))
       }
     };
 

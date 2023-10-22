@@ -16,13 +16,16 @@ export async function createSessionController(
   res: Response,
   next: NextFunction
 ) {
+
+  console.log("Create Session Controller")
   /// Validate the user password
   const email = req.body.email;
   const password = req.body.password;
   const user = await validateUserPasword(email, password);
 
   if (!user) {
-    next(new AutheticationError("User Credentials Invalid"));
+    console.log("In user not found part")
+    return next(new AutheticationError("User Credentials Invalid"));
   } else {
 
     const session = await createSessionService(
@@ -42,7 +45,7 @@ export async function createSessionController(
       { expiresIn: env.ACCESS_TOKEN_TIME }
     );
 
-    return res.sendStatus(201).json({ accessToken, refreshToken });
+    return res.status(201).json({ accessToken, refreshToken });
   }
 
 
