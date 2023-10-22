@@ -6,6 +6,10 @@ import {
 } from "../services/session.services";
 import { signInJWT } from "../utils/jwt.utils";
 import env from "../utils/validateENV";
+import { AutheticationError } from "../errors/authentiction-error";
+import { BadRequestError } from "../errors/badrequest-error";
+import { InternalServerError } from "../errors/internalServerError";
+
 
 export async function createSessionController(
   req: Request,
@@ -18,27 +22,30 @@ export async function createSessionController(
   const user = await validateUserPasword(email, password);
 
   if (!user) {
-    return res.status(401).send("Invalid Email Or Password");
+    next(new AutheticationError("User Credentials Invalid"));
+  } else {
+
+    const session = await createSessionService(
+      user._id,
+      req.get("user-agent") || ""
+    );
+
+    // Create a SignIn Jwt Token
+
+    const accessToken = signInJWT(
+      { ...user.toObject(), session: session._id },
+      { expiresIn: env.ACCESS_TOKEN_TIME }
+    );
+
+    const refreshToken = signInJWT(
+      { ...user, session: session._id },
+      { expiresIn: env.ACCESS_TOKEN_TIME }
+    );
+
+    return res.sendStatus(201).json({ accessToken, refreshToken });
   }
 
-  const session = await createSessionService(
-    user.id,
-    req.get("user-agent") || ""
-  );
 
-  // Create a SignIn Jwt Token
-
-  const accessToken = signInJWT(
-    { ...user, session: session._id },
-    { expiresIn: env.ACCESS_TOKEN_TIME }
-  );
-
-  const refreshToken = signInJWT(
-    { ...user, session: session._id },
-    { expiresIn: env.ACCESS_TOKEN_TIME }
-  );
-
-  return res.send({ accessToken, refreshToken });
 }
 
 export async function getAllSessionController(
@@ -46,9 +53,13 @@ export async function getAllSessionController(
   res: Response,
   next: NextFunction
 ) {
-  const userId = res.locals.user._id;
+  try {
+    const userId = res.locals.user._id;
 
-  const sessions = await findSessionService(userId);
+    const sessions = await findSessionService(userId);
 
-  res.send(sessions);
-}
+    res.sendStatus(200).json(sessions);
+  } catch (error) {
+    next(new InternalServerError("Something went Wrong !!"))
+  }
+} 
