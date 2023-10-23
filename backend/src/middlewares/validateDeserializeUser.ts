@@ -10,7 +10,7 @@ const validateDeserializeUser = (
   const isExpired = res.locals.isExpired;
 
   if (!user) {
-    next(new AutheticationError("The User is not authorized"))
+    return next(new AutheticationError("The User is not authorized"))
   }
 
   return next();

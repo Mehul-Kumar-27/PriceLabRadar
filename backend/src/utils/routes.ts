@@ -10,6 +10,7 @@ import { validateSessionData } from "../schema/session.schema";
 import {
   createSessionController,
   getAllSessionController,
+  setSessionToFalse,
 } from "../controllers/session.controller";
 import validateDeserializeUser from "../middlewares/validateDeserializeUser";
 import errorHandellerMiddlerware from "../middlewares/error.handeller";
@@ -49,6 +50,8 @@ export function routes(app: Express) {
     validateDeserializeUser,
     getAllSessionController
   );
+
+  app.delete("/api/deleteSession", validateDeserializeUser, setSessionToFalse)
 
   app.use(errorHandellerMiddlerware)
 

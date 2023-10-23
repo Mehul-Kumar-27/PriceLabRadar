@@ -3,6 +3,7 @@ import { validateUserPasword } from "../services/user.services";
 import {
   createSessionService,
   findSessionService,
+  updateSession,
 } from "../services/session.services";
 import { signInJWT } from "../utils/jwt.utils";
 import env from "../utils/validateENV";
@@ -57,12 +58,24 @@ export async function getAllSessionController(
   next: NextFunction
 ) {
   try {
-    const userId = res.locals.user._id;
+    const userId: string = res.locals.user._id;
 
-    const sessions = await findSessionService(userId);
 
-    res.sendStatus(200).json(sessions);
+    const sessions = await findSessionService({ userId });
+
+    return res.status(200).json(sessions);
   } catch (error) {
-    next(new InternalServerError("Something went Wrong !!"))
+    return next(new InternalServerError("Something went Wrong !!"))
   }
-} 
+}
+
+
+export async function setSessionToFalse(req: Request, res: Response, next: NextFunction) {
+  try {
+    const sessionId: string = res.locals.user.session;
+    const updateSessionQuery = await updateSession({ _id: sessionId }, { valid: false });
+    return res.status(201).json({ message: "Session Updated Successfully" })
+  } catch (error) {
+    return next(new InternalServerError("Something went Wrong !!"))
+  }
+}

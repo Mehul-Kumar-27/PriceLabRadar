@@ -2,7 +2,7 @@ import env from "./utils/validateENV";
 import express, { ErrorRequestHandler, NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
 import { routes } from "./utils/routes";
-import deserializeUser from "./middlewares/getuser";
+import deserializeUser from "./middlewares/deserializeUser";
 import errorHandellerMiddlerware from "./middlewares/error.handeller";
 
 const app = express();
