@@ -23,7 +23,7 @@ async function validateUserPasword(email: string, password: string) {
       const isValid = await user.comparePassword(password);
       if (!isValid) return false;
 
-      return user.toJSON();
+      return user;
     }
   } catch (error: any) {
     throw new Error(error);

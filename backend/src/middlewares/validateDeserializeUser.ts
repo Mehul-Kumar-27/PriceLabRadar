@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { AutheticationError } from "../errors/authentiction-error";
 
 const validateDeserializeUser = (
   req: Request,
@@ -9,11 +10,7 @@ const validateDeserializeUser = (
   const isExpired = res.locals.isExpired;
 
   if (!user) {
-    if (!isExpired) {
-      return res.status(403).send({ response: "The User Is Not Allowed" });
-    } else {
-      return res.status(403).send({ response: "JWT Token is Expired" });
-    }
+    return next(new AutheticationError("The User is not authorized"))
   }
 
   return next();

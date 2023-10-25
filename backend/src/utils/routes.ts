@@ -10,18 +10,20 @@ import { validateSessionData } from "../schema/session.schema";
 import {
   createSessionController,
   getAllSessionController,
+  setSessionToFalse,
 } from "../controllers/session.controller";
 import validateDeserializeUser from "../middlewares/validateDeserializeUser";
 import errorHandellerMiddlerware from "../middlewares/error.handeller";
+import { InternalServerError } from "../errors/internalServerError";
 
 export function routes(app: Express) {
   app.get(
     "/api/healthcheck",
     (req: Request, res: Response, next: NextFunction) => {
       try {
-        res.send(200)
+        res.sendStatus(200)
       } catch (error) {
-
+        next(new InternalServerError("Something Went Wrong"))
       }
     }
   );
@@ -48,6 +50,8 @@ export function routes(app: Express) {
     validateDeserializeUser,
     getAllSessionController
   );
+
+  app.delete("/api/deleteSession", validateDeserializeUser, setSessionToFalse)
 
   app.use(errorHandellerMiddlerware)
 
