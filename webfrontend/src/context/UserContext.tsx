@@ -1,11 +1,18 @@
 import React, { useState, ReactNode, Dispatch } from "react";
 import UserModle from "../modles/UserModle";
+import axiosInstance from "../network/axiso";
+import axios from "axios";
 
 export interface UserContextInterface {
   user: UserModle;
   setUser: Dispatch<React.SetStateAction<UserModle>>;
   hello: () => void;
-  saveUser: () => void;
+  saveUser: (
+    name?: string,
+    email?: string,
+    password?: string,
+    confirmPassword?: string
+  ) => void;
   error: string;
   setError: Dispatch<React.SetStateAction<string>>;
 }
@@ -20,7 +27,12 @@ const defaultUserContext = {
   setUser: () => {},
   hello: () => {},
 
-  saveUser: () => {},
+  saveUser: (
+    name?: string,
+    email?: string,
+    password?: string,
+    confirmPassword?: string
+  ) => {},
   error: "",
   setError: () => {},
 } as UserContextInterface;
@@ -46,23 +58,44 @@ export default function UserProvider({ children }: UserContextProviderProps) {
     console.log("hello");
   };
 
-  const saveUser = (
+  const saveUser = async (
     name?: string,
     email?: string,
     password?: string,
     confirmPassword?: string
   ) => {
-    if (!name || !email || !password || !confirmPassword) {
-      setError("Please fill all fields");
-      return;
-    }
+    try {
+      // Validate input
+      if (!name || !email || !password || !confirmPassword) {
+        throw new Error("Please fill all fields");
+      }
 
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
-    
+      if (password !== confirmPassword) {
+        throw new Error("Passwords do not match");
+      }
 
+      // Create user data object
+      const userData = {
+        name: name,
+        email: email,
+        password: password,
+        passwordConformation: confirmPassword,
+      };
+
+      console.log("userData", userData);
+
+      const response = await axios.post(
+        "http://localhost:4001/api/create-user",
+        userData
+      );
+
+      console.log("User created successfully:", response.data);
+    } catch (error) {
+      // Handle errors
+      console.error("Error creating user:", error);
+
+      setError("Error Creating User");
+    }
   };
 
   return (

@@ -4,8 +4,10 @@ import mongoose from "mongoose";
 import { routes } from "./utils/routes";
 import deserializeUser from "./middlewares/deserializeUser";
 import errorHandellerMiddlerware from "./middlewares/error.handeller";
+import cors from 'cors';
 
 const app = express();
+app.use(cors());
 
 const port = env.PORT;
 const connectionString = env.MONGO_CONNECTION_STRING;

@@ -1,1 +1,1 @@
-export const createUser = "http://localhost:4001/api/create-user";
+export const createUser = "create-user";

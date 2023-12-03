@@ -10,7 +10,7 @@ const SignUp = () => {
   const { saveUser } = useContext(UserContext);
 
   const handleSignUp = () => {
-    
+    saveUser(name, email, password, confirmPassword);
   };
 
 
@@ -70,6 +70,8 @@ const SignUp = () => {
               borderRadius: "5px",
               border: "none",
             }}
+            value={password}
+            onChange={(e) => setpassword(e.target.value)}
           />
           <label style={{ marginBottom: "10px" }}>Confirm Password</label>
           <input
@@ -80,6 +82,8 @@ const SignUp = () => {
               borderRadius: "5px",
               border: "none",
             }}
+            value={confirmPassword}
+            onChange={(e) => setconfirmPassword(e.target.value)}
           />
           <button
             style={{
