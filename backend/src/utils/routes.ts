@@ -15,6 +15,7 @@ import {
 import validateDeserializeUser from "../middlewares/validateDeserializeUser";
 import errorHandellerMiddlerware from "../middlewares/error.handeller";
 import { InternalServerError } from "../errors/internalServerError";
+import { getTheProductDetails } from "../controllers/validateUrl";
 
 export function routes(app: Express) {
   app.get(
@@ -50,6 +51,8 @@ export function routes(app: Express) {
     validateDeserializeUser,
     getAllSessionController
   );
+
+  app.get("/api/get-product-data", getTheProductDetails)
 
   app.delete("/api/deleteSession", validateDeserializeUser, setSessionToFalse)
 

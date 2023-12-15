@@ -89,7 +89,10 @@ export default function UserProvider({ children }: UserContextProviderProps) {
         userData
       );
 
-      console.log("User created successfully:", response.data);
+      if (response.status == 200) {
+        console.log("User created successfully:", response.data);
+      }
+      // console.log("User created successfully:", response.data);
     } catch (error) {
       // Handle errors
       console.error("Error creating user:", error);
