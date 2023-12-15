@@ -2,6 +2,7 @@ import React, { useState, ReactNode, Dispatch } from "react";
 import UserModle from "../modles/UserModle";
 import axiosInstance from "../network/axiso";
 import axios from "axios";
+import ProductModle from "../modles/ProductModle";
 
 export interface UserContextInterface {
   user: UserModle;
@@ -15,6 +16,8 @@ export interface UserContextInterface {
   ) => void;
   error: string;
   setError: Dispatch<React.SetStateAction<string>>;
+  product: ProductModle;
+  getProductData: (url?: string) => void;
 }
 
 const defaultUserContext = {
@@ -35,6 +38,8 @@ const defaultUserContext = {
   ) => {},
   error: "",
   setError: () => {},
+  product: {},
+  getProductData: (url?: string) => {},
 } as UserContextInterface;
 
 export const UserContext =
@@ -51,6 +56,7 @@ export default function UserProvider({ children }: UserContextProviderProps) {
     password: "",
     confirmPassword: "",
   });
+  const [product, setproduct] = useState<ProductModle>({});
 
   const [error, setError] = useState<string>("");
 
@@ -101,9 +107,49 @@ export default function UserProvider({ children }: UserContextProviderProps) {
     }
   };
 
+  const getProductData = async (url?: string) => {
+    try {
+      if (!url) {
+        throw new Error("Please enter a URL");
+      }
+
+      const response = await axiosInstance.get(
+        "http://localhost:4001/api/get-product-data",
+        {
+          params: {
+            url: url,
+          },
+        }
+      );
+
+      if (response.status == 200) {
+        console.log("Product data:", response.data);
+      }
+
+      const productData = response.data[0];
+
+      const productModel: ProductModle = {
+        Title: productData.Title,
+        Rating: productData.Rating,
+        Price: productData.Price,
+      };
+
+      setproduct(productModel);
+    } catch (error) {}
+  };
+
   return (
     <UserContext.Provider
-      value={{ user, setUser, hello, saveUser, error, setError }}
+      value={{
+        user,
+        setUser,
+        hello,
+        saveUser,
+        error,
+        setError,
+        product,
+        getProductData,
+      }}
     >
       {children}
     </UserContext.Provider>
